@@ -1,0 +1,29 @@
+version: "3.1"
+services:
+    mysql:
+        image: mysql:5.7
+        container_name: fusion-mysql
+        environment:
+            - MYSQL_ROOT_PASSWORD=069414323
+            - MYSQL_DATABASE=fusion
+            - MYSQL_USER=vlad6846
+            - MYSQL_PASSWORD=069414323
+        ports:
+            - 3306:3306
+
+    webserver:
+        build:
+            context: .
+            dockerfile: docker/ci/nginx/Dockerfile
+        container_name: fusion-webserver
+        ports:
+            - 80:80
+
+    php-fpm:
+        image: fletcher6847/fusion:latest
+        container_name: fusion-php-fpm
+        environment:
+            - APP_ENV=prod
+            - APP_SECRET=716f0250a6f3b103881fb1d8f16a833f
+            - MAILER_URL=null://localhost
+            - DATABASE_URL=mysql://vlad6846:069414323@mysql:3306/fusion

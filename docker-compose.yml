@@ -1,0 +1,36 @@
+version: "3.1"
+services:
+    mysql:
+        image: mysql:5.7
+        container_name: fusion-mysql
+        working_dir: /application
+        volumes:
+            - .:/application
+        environment:
+            - MYSQL_ROOT_PASSWORD=069414323
+            - MYSQL_DATABASE=fusion
+            - MYSQL_USER=vlad6846
+            - MYSQL_PASSWORD=069414323
+        ports:
+            - 3306:3306
+
+    webserver:
+        image: nginx:alpine
+        container_name: fusion-webserver
+        working_dir: /application
+        volumes:
+            - .:/application
+            - ./docker/dev/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+        ports:
+            - 80:80
+
+    php-fpm:
+        build: docker/dev/php-fpm
+        container_name: fusion-php-fpm
+        working_dir: /application
+        environment:
+          - XDEBUG_CONFIG=idekey=PHPSTORM
+          - PHP_IDE_CONFIG=serverName=fusion
+        volumes:
+            - .:/application
+            - ./docker/dev/php-fpm/php-ini-overrides.ini:/etc/php/7.2/fpm/conf.d/99-overrides.ini

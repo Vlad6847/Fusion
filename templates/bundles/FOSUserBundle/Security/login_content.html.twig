@@ -1,0 +1,44 @@
+{% trans_default_domain 'FOSUserBundle' %}
+    {% block stylesheets %}
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/loginForm.css') }}"/>
+    {% endblock %}
+
+{% if error %}
+    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+{% endif %}
+
+{% if not is_granted('ROLE_USER') %}
+<div class="row">
+    <div class="col-md-12 pb-3">
+        <form id="loginForm" action="{{ path("fos_user_security_check") }}" method="post">
+            {% if csrf_token %}
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token }}"/>
+            {% endif %}
+            <div class="form-group has-feedback nameBlock">
+                <label class="control-label" for="_username">Email</label>
+                <input type="text" id="username" name="_username" value="{{ last_username }}" class="form-control"
+                       aria-describedby="inputSuccess2Status"/>
+            </div>
+            <div class="form-group has-feedback passwordBlock">
+                <label class="control-label" for="_password">{{ 'security.login.password'|trans }} (Between 4 and 20
+                    characters containing only letters, numbers and ‘_’)</label>
+                <input type="password" id="password" name="_password" maxlength="20" class="form-control"
+                       aria-describedby="inputSuccess2Status"/>
+                <br>
+                <input class="btn btn-primary" type="submit" id="_submit" name="_submit"
+                       value="{{ 'security.login.submit'|trans }}"/>
+            </div>
+        </form>
+        {% else %}
+            <div class="col-xs-12 pb-3">
+                <div class="text-center">
+                    <h1>You are logged</h1>
+                    <a class="btn btn-danger" href="{{ path('fos_user_security_logout') }}">Logout</a>
+                </div>
+            </div>
+
+        {% endif %}
+        {% block javascripts %}
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+            <script src="{{ asset('js/validation.js') }}"></script>
+        {% endblock %}
