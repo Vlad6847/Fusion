@@ -3,9 +3,8 @@ $(document).ready(function () {
     let validName = false;
     let validPassword = false;
 
-    function checkAll() {
+    function checkName() {
         let name = $("#username").val();
-        let password = $("#password").val();
 
         if (null === name.match(/[A-Za-z0-9_]+@[A-Za-z0-9_]+\.[A-Za-z0-9_]+$/)) {
             $("#username").parent().removeClass("has-success").addClass("has-error");
@@ -18,6 +17,15 @@ $(document).ready(function () {
             $(".nameBlock .glyphicon-remove").remove();
             validName = true;
         }
+
+        if (validName === true && validPassword === true) {
+            $("#loginForm").unbind('submit');
+        }
+    }
+
+	function checkPassword() {
+        let password = $("#password").val();
+
         if (null === password.match(/^[\w]{4,20}$/)) {
             $("#password").parent().removeClass("has-success").addClass("has-error");
             $(".passwordBlock").append("<span class='glyphicon glyphicon-remove form-control-feedback' aria-hidden='true'></span>");
@@ -30,19 +38,22 @@ $(document).ready(function () {
             validPassword = true;
         }
 
-
         if (validName === true && validPassword === true) {
             $("#loginForm").unbind('submit');
         }
-    }
+	}
 
     $("#loginForm").submit(function (event) {
         event.preventDefault();
-        checkAll();
+        checkName();
+        checkPassword();
     });
 
-    $("#loginForm").focusout(function (event) {
-        event.preventDefault();
-        checkAll();
+    $("#username").change(function () {
+        checkName();
+    });
+
+     $("#password").change(function () {
+        checkPassword();
     });
 });

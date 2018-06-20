@@ -19,8 +19,8 @@ jobs:
           command: |
             docker-compose -f docker-compose.ci.yml up -d --build --force-recreate
             docker-compose -f docker-compose.ci.yml ps
-            docker commit jobeet-php-fpm fletcher6847/fusion:$CIRCLE_SHA1
-            docker commit jobeet-php-fpm fletcher6847/fusion:latest
+            docker commit fusion-php-fpm fletcher6847/fusion:$CIRCLE_SHA1
+            docker commit fusion-php-fpm fletcher6847/fusion:latest
             docker images
             docker login -u $DOCKER_HUB_USER_ID -p $DOCKER_HUB_PWD
             docker push $DOCKER_HUB_USER_ID/fuison:$CIRCLE_SHA1
